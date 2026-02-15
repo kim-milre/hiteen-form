@@ -1,12 +1,12 @@
 import os
 from motor.motor_asyncio import AsyncIOMotorClient
-from dotenv import load_dotenv
 
-load_dotenv()
-
-MONGO_URL = os.getenv("MONGO_URL")
+MONGODB_URI = os.getenv("MONGODB_URI") or os.getenv("MONGO_URL")
 DB_NAME = os.getenv("DB_NAME", "amicom_template")
 ADMIN_TOKEN = os.getenv("ADMIN_TOKEN", "")
 
-client = AsyncIOMotorClient(MONGO_URL)
+if not MONGODB_URI:
+    raise RuntimeError("MONGODB_URI is not set")
+
+client = AsyncIOMotorClient(MONGODB_URI)
 db = client[DB_NAME]
